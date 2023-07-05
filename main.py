@@ -1,13 +1,102 @@
+import os
+
 from telebot.async_telebot import AsyncTeleBot
 from telebot.types import ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton
+from dotenv import load_dotenv, find_dotenv
 
-bot = AsyncTeleBot("6364995657:AAGmKfhfGkH9QSI_UpocmXdd_ZF2B5nQih8")
+
+
+load_dotenv(find_dotenv())
+
+TOKEN = os.getenv("TOKEN")
+
+
+bot = AsyncTeleBot(TOKEN, parse_mode="HTML")
 
 
 @bot.message_handler(commands={"start"})
 async def send_welcome(message):
     chat_id = message.from_user.id
     await bot.send_message(chat_id, "Приветствую тебя,новый пользователь", disable_notification=True, protect_content=True)
+
+@bot.message_handler(commands={"text"})
+async def send_welcome(message):
+    chat_id = message.from_user.id
+    await bot.delete_message(chat_id, message.id)
+
+@bot.message_handler(commands={"f1"})
+async def send_welcome(message):
+    chat_id = message.from_user.id
+
+
+    await bot.send_message(chat_id, "<b>жирно написаный текст</b>")
+
+@bot.message_handler(commands={"f2"})
+async def send_welcome(message):
+    chat_id = message.from_user.id
+
+
+    await bot.send_message(chat_id, "<i>кравсиво написаный текст</i>")
+
+@bot.message_handler(commands={"f3"})
+async def send_welcome(message):
+    chat_id = message.from_user.id
+
+
+    await bot.send_message(chat_id, "<u>выделенный текст</u>")
+
+@bot.message_handler(commands={"f4"})
+async def send_welcome(message):
+    chat_id = message.from_user.id
+
+
+    await bot.send_message(chat_id, "<s>зачёркнуты текст</s>")
+
+@bot.message_handler(commands={"f5"})
+async def send_welcome(message):
+    chat_id = message.from_user.id
+
+
+    await bot.send_message(chat_id, "<code>моноширный текст</code>")
+
+@bot.message_handler(commands={"f6"})
+async def send_welcome(message):
+    chat_id = message.from_user.id
+
+
+    await bot.send_message(chat_id, "<pre>моноширный текст 2</pre>")
+
+@bot.message_handler(commands={"f7"})
+async def send_welcome(message):
+    chat_id = message.from_user.id
+
+
+    await bot.send_message(chat_id, "<tg-spoiler>спойлер</tg-spoiler>")
+
+@bot.message_handler(commands={"f8"})
+async def send_welcome(message):
+    chat_id = message.from_user.id
+    print(chat_id)
+
+
+    await bot.send_message(chat_id, '<a href="https://avatars.dzeninfra.ru/get-zen_doc/3507111/pub_619a6f2dfd60084f33dd81ce_619a719051fb0a58db46e147/scale_1200">ccылка</a>')
+
+@bot.message_handler(commands={"f9"})
+async def send_welcome(message):
+    chat_id = message.from_user.id
+
+
+    await bot.send_message(chat_id, '<a href="tg://user?id=5525272373">пользователь</a>')
+
+@bot.message_handler(commands={"edit"})
+async def send_welcome(message):
+    chat_id = message.from_user.id
+    bot_message = await bot.send_message(chat_id, "Начался таймер 5 секунд")
+    for i in range(1,6):
+        await asyncio.sleep(1)
+        await bot.edit_message_text(f"{5-i} секунд осталось", chat_id, bot_message.id)
+    await bot . delete_message(chat_id, bot_message.id)
+
 
 @bot.message_handler(commands={"play"})
 async def send_welcome(message):
