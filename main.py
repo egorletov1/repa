@@ -1,185 +1,121 @@
-import os
-
-from telebot.async_telebot import AsyncTeleBot
-from telebot.types import ReplyKeyboardMarkup, InlineKeyboardMarkup, InlineKeyboardButton
-from dotenv import load_dotenv, find_dotenv
+from telebot import types
+import telebot
+import random
 
 
 
-load_dotenv(find_dotenv())
+TOKEN='6137544522:AAGtLYNcv3eIeqQAK_q8jnwFsPwPfcyz3Ws'
+bot = telebot.TeleBot(TOKEN, parse_mode='HTML')
 
-TOKEN = os.getenv("TOKEN")
+def par_an():
+    anec_list = list()
+    anec_str = ''
+    with open('text.txt', 'r', encoding="utf-8") as file:
+        anec = file.read()
 
-
-bot = AsyncTeleBot(TOKEN, parse_mode="HTML")
-
-
-@bot.message_handler(commands={"start"})
-async def send_welcome(message):
-    chat_id = message.from_user.id
-    await bot.send_message(chat_id, "Приветствую тебя,новый пользователь", disable_notification=True, protect_content=True)
-
-@bot.message_handler(commands={"text"})
-async def send_welcome(message):
-    chat_id = message.from_user.id
-    await bot.delete_message(chat_id, message.id)
-
-@bot.message_handler(commands={"f1"})
-async def send_welcome(message):
-    chat_id = message.from_user.id
-
-
-    await bot.send_message(chat_id, "<b>жирно написаный текст</b>")
-
-@bot.message_handler(commands={"f2"})
-async def send_welcome(message):
-    chat_id = message.from_user.id
-
-
-    await bot.send_message(chat_id, "<i>кравсиво написаный текст</i>")
-
-@bot.message_handler(commands={"f3"})
-async def send_welcome(message):
-    chat_id = message.from_user.id
-
-
-    await bot.send_message(chat_id, "<u>выделенный текст</u>")
-
-@bot.message_handler(commands={"f4"})
-async def send_welcome(message):
-    chat_id = message.from_user.id
-
-
-    await bot.send_message(chat_id, "<s>зачёркнуты текст</s>")
-
-@bot.message_handler(commands={"f5"})
-async def send_welcome(message):
-    chat_id = message.from_user.id
-
-
-    await bot.send_message(chat_id, "<code>моноширный текст</code>")
-
-@bot.message_handler(commands={"f6"})
-async def send_welcome(message):
-    chat_id = message.from_user.id
-
-
-    await bot.send_message(chat_id, "<pre>моноширный текст 2</pre>")
-
-@bot.message_handler(commands={"f7"})
-async def send_welcome(message):
-    chat_id = message.from_user.id
-
-
-    await bot.send_message(chat_id, "<tg-spoiler>спойлер</tg-spoiler>")
-
-@bot.message_handler(commands={"f8"})
-async def send_welcome(message):
-    chat_id = message.from_user.id
-    print(chat_id)
-
-
-    await bot.send_message(chat_id, '<a href="https://avatars.dzeninfra.ru/get-zen_doc/3507111/pub_619a6f2dfd60084f33dd81ce_619a719051fb0a58db46e147/scale_1200">ccылка</a>')
-
-@bot.message_handler(commands={"f9"})
-async def send_welcome(message):
-    chat_id = message.from_user.id
-
-
-    await bot.send_message(chat_id, '<a href="tg://user?id=5525272373">пользователь</a>')
-
-@bot.message_handler(commands={"edit"})
-async def send_welcome(message):
-    chat_id = message.from_user.id
-    bot_message = await bot.send_message(chat_id, "Начался таймер 5 секунд")
-    for i in range(1,6):
-        await asyncio.sleep(1)
-        await bot.edit_message_text(f"{5-i} секунд осталось", chat_id, bot_message.id)
-    await bot . delete_message(chat_id, bot_message.id)
-
-
-@bot.message_handler(commands={"play"})
-async def send_welcome(message):
-    chat_id = message.from_user.id
-    bot_message = await bot.send_dice(chat_id, "🎲")
-    print(bot_message.dice.value)
-
-@bot.message_handler(commands={"sticker"})
-async def send_welcome(message):
-    chat_id = message.from_user.id
-    await bot.send_sticker(chat_id, "CAACAgIAAxkBAAIiAWSkCvMQEYNvjXijI2937WG2KoZxAAL6AgACpFmlEpCt9UO6SPQELwQ")
-
-@bot.message_handler(commands={"file"})
-async def send_welcome(message):
-    chat_id = message.from_user.id
-    await bot.send_document(chat_id, open("text.txt", "rb"))
-
-@bot.message_handler(commands={"location"})
-async def send_welcome(message):
-    chat_id = message.from_user.id
-    await bot.send_location(chat_id, 48.59439179295278, 38.00024657228844)
-
-@bot.message_handler(commands={"photo"})
-async def send_welcome(message):
-    chat_id = message.from_user.id
-    await bot.send_photo(chat_id, "https://pics.wikireality.ru/upload/1/14/EeeRock.jpg", caption="Летов воскрес:")
+    while anec.find('#') !=-1:
+        anec_list.append(anec[0:anec.find('#')])
+        anec = anec[anec.find('#')+1:len(anec)-1]
+    print(anec_list)
+    return anec_list
 
 
 
+def w_b_id(id):
+    with open('id.txt', 'w') as file:
+        file.write(str(id.id))
+def r_b_id():
+    with open('id.txt', 'r') as file:
+        id = int(file.read())
+    return id
 
-@bot.message_handler(commands={"menu"})
-async def send_welcome(message):
-    chat_id =message.chat.id
-    markup = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
-    markup.add("/start")
-    markup.add("/play")
-    markup.add("/sticker")
-    markup.add("/file")
-    markup.add("/location")
-    markup.add("/photo")
-    await bot.send_message(chat_id, "меню кнопок", reply_markup=markup)
+def calculet(primer):
+    try:
+        answer = eval(primer)
+    except:
+        return 'Не правильно введен пример'
+    return primer + '=' + str(answer)
 
-def generate_reply_keyboard(list_buttons, row):
-    markup = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
-    markup.add(*list_buttons, row_width=row)
-    return  markup
+class M_sost():
+    def __init__(self):
+        self.call_2 = False
 
-@bot.message_handler(commands={"menu"})
-async def send_welcome(message):
-    chat_id = message.from_user.id
-    list_buttons = "Первая кнопка", "Вторая кнопка", "Третья кнопка"
-    await bot.send_message(chat_id, "второй вариант кнопок", reply_markup=generate_reply_keyboard(list_buttons,2))
+m_sost = M_sost()
+
+def skill(chat_id):
+    print('work')
+    keyword = types.InlineKeyboardMarkup()
+    btn1 = types.InlineKeyboardButton(text='Расскажи анекдот', callback_data='3')
+    btn2 = types.InlineKeyboardButton(text='Могу стать калькулятором', callback_data='4')
+    keyword.add(btn1)
+    keyword.add(btn2)
+    dz_id = bot.send_message(chat_id, 'Я много чего умею, выбери что хочешь', reply_markup=keyword)
+    w_b_id(dz_id)
+
+def b_answer(chat_id, ans, message):
+    bot.delete_message(chat_id, r_b_id())
+    bot.delete_message(chat_id, message.id)
+    keyword = types.InlineKeyboardMarkup()
+    btn1 = types.InlineKeyboardButton(text='Вернуться к моим умениям', callback_data='5')
+    keyword.add(btn1)
+    dz_id = bot.send_message(chat_id, ans, reply_markup=keyword)
+    w_b_id(dz_id)
+
+def b_answer1(chat_id, ans, message):
+    bot.delete_message(chat_id, r_b_id())
+    keyword = types.InlineKeyboardMarkup()
+    btn1 = types.InlineKeyboardButton(text='Вернуться к моим умениям', callback_data='5')
+    keyword.add(btn1)
+    dz_id = bot.send_message(chat_id, ans, reply_markup=keyword)
+    w_b_id(dz_id)
 
 
-class InlineKeyboadMurkup:
-    pass
+@bot.message_handler(commands=['start'])
+def send_welcome(message):
+    chat_id = message.chat.id
+    keyword = types.InlineKeyboardMarkup()
+    btn1 = types.InlineKeyboardButton(text='да', callback_data='1')
+    btn2 = types.InlineKeyboardButton(text='Нет', callback_data='2')
+    keyword.row(btn1, btn2)
+    dz_id = bot.send_message(chat_id, 'Привет, меня зовут Джудия. Хочешь узнать что я умею?', reply_markup=keyword)
+    w_b_id(dz_id)
 
 
-@bot.message_handler(commands={"menu2"})
-async def send_welcome(message):
-    chat_id = message.from_user.id
-    markup = InlineKeyboadMurkup()
-    button1 = InlineKeyboardButton("Первая кнопка", callback_data="first")
-    button2 = InlineKeyboardButton("Вторая кнопка", callback_data="second")
-    button3 = InlineKeyboardButton("Третья кнопка", callback_data="three")
-    markup.add(button1)
-    markup.add(button2)
-    markup.add(button3)
-    await bot.send_message(chat_id, "Первый вариант кнопок", reply_markup=markup)
+@bot.callback_query_handler(func=lambda call: True)
+def callback_worker(call):
+    chat_id = call.message.chat.id
+    if call.data == '1':
+        bot.delete_message(chat_id, r_b_id())
+        skill(chat_id)
+    elif call.data == '4':
+        m_sost.call_2 = True
+        bot.delete_message(chat_id, r_b_id())
+        markup = types.ForceReply(selective=False)
+        dz_id = bot.send_message(chat_id, 'Введи однострочный пример', reply_markup=markup)
+        w_b_id(dz_id)
+    elif call.data == '3':
+        ans = par_an()
+        b_answer1(chat_id, ans[random.randint(0, len(ans)-1)], call.message)
+
+    elif call.data == '5':
+        bot.delete_message(chat_id, r_b_id())
+        skill(chat_id)
+    elif call.data == '2':
+        bot.send_message(chat_id, 'Ладно, если передумаешь просто нажми на /start)')
+    else:
+        bot.send_message(chat_id, 'Извини я тебя не поняла')
+
+
 
 @bot.message_handler(func=lambda message: True)
-async def echo_message(message):
-    text_message = message.text
-    text_message = text_message.lower()
-    if "дела" in text_message or "настроение" in text_message:
-        await bot.reply_to(message, "Хорошо, а у тебя?")
-    elif "погода" in text_message:
-        await bot.reply_to(message, "Отличная")
-    else:
-        await bot.reply_to(message, "Извините, я вас не понял")
+def messege_worker(message):
+    chat_id = message.chat.id
+    if m_sost.call_2:
+        m_sost.call_2 = False
+        ans = calculet(message.text)
+        b_answer(chat_id, ans, message)
 
 
 
-import asyncio
 
-asyncio.run(bot.polling())
+bot.infinity_polling()
